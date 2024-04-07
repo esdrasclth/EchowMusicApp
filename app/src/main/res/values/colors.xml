@@ -2,9 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="seed">#ffffff</color>
     <color name="colorPrimary">#001F24</color>
-    <color name="colorSecundary">#006874</color>
+    <color name="colorSecundary">#2d6a4f</color>
+    <color name="colorTertiary">#cad2c5</color>
     <color name="md_theme_light_primaryContainer">#97F0FF</color>
     <color name="md_theme_light_secondary">#9C441A</color>
     <color name="md_theme_light_onTertiaryContainer">#001550</color>
