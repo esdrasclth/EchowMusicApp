@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
                 String passUser = password.getText().toString().trim();
 
                 if (emailUser.isEmpty() && passUser.isEmpty()){
-                    Toast.makeText(LoginActivity.this, "Favor llenar los campos", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "Todos los campos son obligatorios", Toast.LENGTH_LONG).show();
                 } else {
                     loginUser(emailUser, passUser);
                 }
@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(LoginActivity.this, "Error al iniciar sesion", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Ocurrio un error al inisiar sesion", Toast.LENGTH_SHORT).show();
             }
         });
     }
