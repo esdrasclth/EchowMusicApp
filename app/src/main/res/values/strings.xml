@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">EchowMusicApp</string>
+    <string name="app_name">Echow Music App</string>
+
+    <string name="home">Inicio</string>
+    <string name="upload">Subida</string>
+    <string name="group">Grupos</string>
+    <string name="setting">Configuracion</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

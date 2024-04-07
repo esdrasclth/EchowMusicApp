@@ -2,4 +2,14 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="seed">#ffffff</color>
+    <color name="colorPrimary">#001F24</color>
+    <color name="colorSecundary">#006874</color>
+    <color name="md_theme_light_primaryContainer">#97F0FF</color>
+    <color name="md_theme_light_secondary">#9C441A</color>
+    <color name="md_theme_light_onTertiaryContainer">#001550</color>
+    <color name="md_theme_light_error">#BA1A1A</color>
+    <color name="md_theme_light_onErrorContainer">#410002</color>
+    <color name="md_theme_light_onBackground">#191C1D</color>
+    <color name="md_theme_dark_errorContainer">#93000A</color>
 </resources>
