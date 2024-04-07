@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "178256945414",
+    "project_id": "echowmusicapp-ad835",
+    "storage_bucket": "echowmusicapp-ad835.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:178256945414:android:81bb01e9c13288bb44be87",
+        "android_client_info": {
+          "package_name": "com.example.echowmusicapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBi0-rSCjhIeZc8tTz7mtU9GxaO0iTGh_s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

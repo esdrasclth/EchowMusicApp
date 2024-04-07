@@ -10,6 +10,8 @@ legacySupportV4 = "1.0.0"
 material = "1.11.0"
 activity = "1.8.0"
 constraintlayout = "2.1.4"
+googleServices = "4.4.1"
+firebaseAuth = "22.3.1"
 
 [libraries]
 espresso-core-v311 = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }
@@ -22,6 +24,8 @@ legacy-support-v4 = { module = "androidx.legacy:legacy-support-v4", version.ref 
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+google-services = { group = "com.google.gms", name = "google-services", version.ref = "googleServices" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
