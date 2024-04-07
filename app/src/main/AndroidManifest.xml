@@ -13,6 +13,12 @@
         android:theme="@style/Theme.EchowMusicApp"
         tools:targetApi="31">
         <activity
+            android:name=".Screen.Auth.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Screen.Auth.LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".NavigationActivity"
             android:exported="true">
             <intent-filter>
