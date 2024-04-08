@@ -15,6 +15,7 @@ googleServices = "4.4.1"
 firebaseAuth = "22.3.1"
 firebaseDatabase = "20.3.1"
 firebaseFirestore = "24.11.0"
+firebaseStorage = "20.3.0"
 
 [libraries]
 appcompat-v7 = { module = "com.android.support:appcompat-v7", version.ref = "appcompatV7" }
@@ -34,6 +35,7 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 support-v4 = { module = "com.android.support:support-v4", version.ref = "appcompatV7" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

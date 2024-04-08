@@ -36,6 +36,7 @@
             android:layout_height="wrap_content"
             android:textSize="15dp"
             android:backgroundTint="@color/colorSecundary"
+            android:onClick="openAudioFiles"
             android:textColor="@color/white"
             android:layout_marginLeft="4dp"
             android:text="Seleccionar"
@@ -114,6 +115,7 @@
         android:id="@+id/buttomUpload"
         android:layout_marginTop="15dp"
         android:backgroundTint="@color/colorPrimary"
+        android:onClick="uploadFileTofirebase"
         android:textColor="@color/white"
         android:text="SUBIR MUSICA"
         android:textStyle="bold">
