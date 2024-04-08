@@ -36,6 +36,7 @@ dependencies {
     implementation libs.constraintlayout
     implementation libs.appcompat
     implementation libs.legacy.support.v4
+    implementation libs.core.ktx
     //implementation libs.design
     implementation libs.firebase.auth
     implementation libs.firebase.database
