@@ -119,5 +119,37 @@
         android:text="SUBIR MUSICA"
         android:textStyle="bold">
     </Button>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnClean"
+            android:layout_marginTop="3dp"
+            android:backgroundTint="@color/colorSecundary"
+            android:layout_marginRight="2dp"
+            android:textColor="@color/white"
+            android:text="LIMPLIAR"
+            android:textStyle="bold">
+        </Button>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnNewAlbum"
+            android:layout_marginTop="3dp"
+            android:backgroundTint="@color/colorSecundary"
+            android:layout_marginLeft="2dp"
+            android:textColor="@color/white"
+            android:text="NUEVO ALBUM"
+            android:textStyle="bold">
+        </Button>
+    </LinearLayout>
+
 
 </LinearLayout>

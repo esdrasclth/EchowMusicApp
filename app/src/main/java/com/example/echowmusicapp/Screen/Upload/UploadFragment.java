@@ -118,7 +118,7 @@ public class UploadFragment extends Fragment implements AdapterView.OnItemSelect
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View rootView = inflater.inflate(R.layout.fragment_upload, container, false);
 
         textViewImage = rootView.findViewById(R.id.textViewSongsFilesSelected);
@@ -180,23 +180,15 @@ public class UploadFragment extends Fragment implements AdapterView.OnItemSelect
 
     }
 
-    /*public void openAudioFiles() {
-        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-        i.setType("*audio/*");
-        startActivityForResult(i, 101);
-    }*/
-
     private final int REQUEST_PERMISSION_CODE = 100;
     private final ActivityResultLauncher<Intent> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-            // Handle successful audio selection
             audioUri = result.getData().getData();
             assert audioUri != null;
+
             String fileNames = getFileName(audioUri);
             textViewImage.setText(fileNames);
-            // ... rest of your logic to process the selected audio file
         } else {
-            // Handle user cancellation or error
             Toast.makeText(requireContext(), "Seleccion de audio cancelada.", Toast.LENGTH_SHORT).show();
         }
     });
@@ -205,14 +197,11 @@ public class UploadFragment extends Fragment implements AdapterView.OnItemSelect
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
-                // Request permission if not granted
                 getSongMetadataSelected.launch(new Intent(Intent.ACTION_GET_CONTENT).setType("*/*"));
             } else {
-                // Permission already granted, open audio selection directly
                 requestPermissionLauncher.launch(new Intent(Intent.ACTION_GET_CONTENT).setType("*/*"));
             }
         } else {
-            // No permission check needed for older versions, open audio selection
             getSongMetadataSelected.launch(new Intent(Intent.ACTION_GET_CONTENT).setType("*/*"));
         }
     }
@@ -289,14 +278,12 @@ public class UploadFragment extends Fragment implements AdapterView.OnItemSelect
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            // Aquí se ejecuta cuando la carga del archivo se completa con éxito
                             storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    // Crear un objeto UploadSong con los datos necesarios
                                     UploadSong uploadSong = new UploadSong(songsCategory, title1, artista1, album_art1, duracion1, uri.toString());
-                                    // Obtener una clave única para la canción subida
                                     String uploadId = referenceSongs.push().getKey();
+
                                     // Guardar la información de la canción en la base de datos Firebase
                                     referenceSongs.child(uploadId).setValue(uploadSong)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -309,11 +296,9 @@ public class UploadFragment extends Fragment implements AdapterView.OnItemSelect
                                                             .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
                                                                 @Override
                                                                 public void onClick(DialogInterface dialog, int which) {
-                                                                    // Iniciar la actividad para ver la lista de canciones
                                                                     Intent intent = new Intent(requireActivity(), NavigationActivity.class);
                                                                     startActivity(intent);
 
-                                                                    // Finalizar la actividad actual
                                                                     requireActivity().finish();
                                                                 }
                                                             })
@@ -355,7 +340,6 @@ public class UploadFragment extends Fragment implements AdapterView.OnItemSelect
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            // Aquí se ejecuta si hay un error durante la carga del archivo
                             Toast.makeText(requireContext(), "Error al subir el archivo: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
                         }
