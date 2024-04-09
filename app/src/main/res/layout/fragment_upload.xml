@@ -57,6 +57,7 @@
         android:layout_height="wrap_content"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:id="@+id/progressbar"
+        android:progressTint="@color/colorSecundary"
         android:layout_marginTop="10dp">
     </ProgressBar>
     

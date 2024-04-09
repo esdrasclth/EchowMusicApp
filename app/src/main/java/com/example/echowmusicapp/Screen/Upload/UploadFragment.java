@@ -3,7 +3,10 @@ package com.example.echowmusicapp.Screen.Upload;
 import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -33,7 +36,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.echowmusicapp.Models.UploadSong;
+import com.example.echowmusicapp.NavigationActivity;
 import com.example.echowmusicapp.R;
+import com.example.echowmusicapp.Screen.Auth.LoginActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -182,16 +187,17 @@ public class UploadFragment extends Fragment implements AdapterView.OnItemSelect
     }*/
 
     private final int REQUEST_PERMISSION_CODE = 100;
-    private ActivityResultLauncher<Intent> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    private final ActivityResultLauncher<Intent> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == RESULT_OK && result.getData() != null) {
             // Handle successful audio selection
             audioUri = result.getData().getData();
+            assert audioUri != null;
             String fileNames = getFileName(audioUri);
             textViewImage.setText(fileNames);
             // ... rest of your logic to process the selected audio file
         } else {
             // Handle user cancellation or error
-            Toast.makeText(requireContext(), "Audio selection cancelled.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Seleccion de audio cancelada.", Toast.LENGTH_SHORT).show();
         }
     });
 
@@ -200,42 +206,51 @@ public class UploadFragment extends Fragment implements AdapterView.OnItemSelect
             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
                 // Request permission if not granted
-                requestPermissionLauncher.launch(new Intent(Intent.ACTION_GET_CONTENT).setType("*/*"));
+                getSongMetadataSelected.launch(new Intent(Intent.ACTION_GET_CONTENT).setType("*/*"));
             } else {
                 // Permission already granted, open audio selection directly
                 requestPermissionLauncher.launch(new Intent(Intent.ACTION_GET_CONTENT).setType("*/*"));
             }
         } else {
             // No permission check needed for older versions, open audio selection
-            requestPermissionLauncher.launch(new Intent(Intent.ACTION_GET_CONTENT).setType("*/*"));
+            getSongMetadataSelected.launch(new Intent(Intent.ACTION_GET_CONTENT).setType("*/*"));
         }
     }
 
-    private ActivityResultLauncher<Intent> requestPermissionLauncher2 = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    ActivityResultLauncher<Intent> getSongMetadataSelected = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-            // Handle successful audio selection (previously in onActivityResult)
             audioUri = result.getData().getData();
             String fileNames = getFileName(audioUri);
             textViewImage.setText(fileNames);
-            metadataRetriever.setDataSource(getActivity(), audioUri);
 
-            art = metadataRetriever.getEmbeddedPicture();
-            Bitmap bitmap = BitmapFactory.decodeByteArray(art, 0, art.length);
-            album_art.setImageBitmap(bitmap);
-            album.setText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM));
-            artista.setText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
-            dataa.setText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE));
-            duracion.setText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
-            title.setText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE));
+            try {
+                if (audioUri != null) {
+                    metadataRetriever.setDataSource(requireContext(), audioUri);
 
-            artista1 = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-            title1 = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
-            duracion1 = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                    art = metadataRetriever.getEmbeddedPicture();
+                    if (art != null) {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(art, 0, art.length);
+                        album_art.setImageBitmap(bitmap);
+                    }
+                    album.setText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM));
+                    artista.setText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST));
+                    dataa.setText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE));
+                    duracion.setText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+                    title.setText(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE));
+
+                    artista1 = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+                    title1 = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+                    duracion1 = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(requireContext(), "Error al obtener los metadatos del audio.", Toast.LENGTH_SHORT).show();
+            }
         } else {
-            // Handle user cancellation or error
-            Toast.makeText(requireContext(), "Audio selection cancelled.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Seleccion de audio cancelada.", Toast.LENGTH_SHORT).show();
         }
     });
+
 
     private String getFileName(Uri uri) {
         String result = null;
@@ -267,35 +282,86 @@ public class UploadFragment extends Fragment implements AdapterView.OnItemSelect
 
     private void uploadFiles() {
         if (audioUri != null) {
-            Toast.makeText(getActivity(), "Cargando, porfavor espera!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireActivity(), "Cargando, por favor espera...", Toast.LENGTH_SHORT).show();
             progressBar.setVisibility(View.VISIBLE);
-            final StorageReference storageReference = mStorageref.child(System.currentTimeMillis()+"."+getfileextension(audioUri));
-            mUploadTask = storageReference.putFile(audioUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            final StorageReference storageReference = mStorageref.child(System.currentTimeMillis() + "." + getfileextension(audioUri));
+            mUploadTask = storageReference.putFile(audioUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
-                        public void onSuccess(Uri uri) {
-                            UploadSong uploadSong = new UploadSong(songsCategory, title1, artista1, album_art1, duracion1, uri.toString());
-                            String uploadId = referenceSongs.push().getKey();
-                            referenceSongs.child(uploadId).setValue(uploadSong);
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // Aquí se ejecuta cuando la carga del archivo se completa con éxito
+                            storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    // Crear un objeto UploadSong con los datos necesarios
+                                    UploadSong uploadSong = new UploadSong(songsCategory, title1, artista1, album_art1, duracion1, uri.toString());
+                                    // Obtener una clave única para la canción subida
+                                    String uploadId = referenceSongs.push().getKey();
+                                    // Guardar la información de la canción en la base de datos Firebase
+                                    referenceSongs.child(uploadId).setValue(uploadSong)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    // Mostrar un diálogo informativo al finalizar la subida
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                                                    builder.setTitle("Carga exitosa")
+                                                            .setMessage("El archivo se ha cargado correctamente. ¿Deseas ver la lista de canciones?")
+                                                            .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    // Iniciar la actividad para ver la lista de canciones
+                                                                    Intent intent = new Intent(requireActivity(), NavigationActivity.class);
+                                                                    startActivity(intent);
+
+                                                                    // Finalizar la actividad actual
+                                                                    requireActivity().finish();
+                                                                }
+                                                            })
+                                                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    // Limpiar los campos de texto
+                                                                    textViewImage.setText("No hay archivo seleccionado.");
+                                                                    album_art.setImageBitmap(null);
+                                                                    album.setText("");
+                                                                    artista.setText("");
+                                                                    dataa.setText("");
+                                                                    duracion.setText("");
+                                                                    title.setText("");
+
+                                                                    progressBar.setProgress(0);
+                                                                }
+                                                            })
+                                                            .show();
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(requireContext(), "Error al guardar la información de la canción: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                }
+                            });
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                            double progress = (100.0 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                            progressBar.setProgress((int) progress);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Aquí se ejecuta si hay un error durante la carga del archivo
+                            Toast.makeText(requireContext(), "Error al subir el archivo: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.GONE);
                         }
                     });
-                }
-            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                    double progress = (100.0 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getActivity(), "Error al subir el archivo: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
-                }
-            });
         } else {
-            Toast.makeText(getActivity(), "No hay archivos seleccionados", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireActivity(), "No hay archivos seleccionados", Toast.LENGTH_SHORT).show();
         }
     }
 
