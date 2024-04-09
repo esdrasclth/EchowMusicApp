@@ -14,7 +14,7 @@
         android:layout_marginTop="30dp"
         android:textSize="15dp"
         android:textStyle="bold"
-        android:textColor="@color/colorSecundary"
+        android:textColor="@color/colorPrimary"
         android:text="Seleccionar categoria:"
         android:layout_marginBottom="5dp">
     </TextView>
@@ -113,7 +113,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/uploadFileTofirebase"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="50dp"
         android:backgroundTint="@color/colorPrimary"
         android:textColor="@color/white"
         android:text="SUBIR MUSICA"

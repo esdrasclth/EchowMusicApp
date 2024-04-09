@@ -21,6 +21,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +40,7 @@ import android.widget.Toast;
 import com.example.echowmusicapp.Models.UploadSong;
 import com.example.echowmusicapp.NavigationActivity;
 import com.example.echowmusicapp.R;
+import com.example.echowmusicapp.Screen.Album.AlbumFragment;
 import com.example.echowmusicapp.Screen.Auth.LoginActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -73,7 +76,7 @@ public class UploadFragment extends Fragment implements AdapterView.OnItemSelect
     TextView title, artista, album, dataa, duracion;
     ImageView album_art;
 
-    Button openAudioFiles, uploadFileTofirebase;
+    Button openAudioFiles, uploadFileTofirebase, NewAlbum, BtnClean;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -133,6 +136,8 @@ public class UploadFragment extends Fragment implements AdapterView.OnItemSelect
         spinner.setOnItemSelectedListener(this);
         openAudioFiles = rootView.findViewById(R.id.openAudioFiles);
         uploadFileTofirebase = rootView.findViewById(R.id.uploadFileTofirebase);
+        NewAlbum = rootView.findViewById(R.id.btnNewAlbum);
+        BtnClean = rootView.findViewById(R.id.btnClean);
 
         openAudioFiles.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,6 +150,13 @@ public class UploadFragment extends Fragment implements AdapterView.OnItemSelect
             @Override
             public void onClick(View v) {
                 uploadFileTofirebase();
+            }
+        });
+        
+        NewAlbum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchCreateNewAlbum();
             }
         });
 
@@ -165,6 +177,17 @@ public class UploadFragment extends Fragment implements AdapterView.OnItemSelect
         spinner.setAdapter(dataAdapter);
 
         return rootView;
+    }
+
+    private void launchCreateNewAlbum() {
+        AlbumFragment albumFragment = new AlbumFragment();
+
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager(); // O getChildFragmentManager() si estás en un Fragment
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        transaction.replace(R.id.fragment_container, albumFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
