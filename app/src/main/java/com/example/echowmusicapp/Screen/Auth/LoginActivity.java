@@ -89,10 +89,20 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(String emailUser, String passUser) {
+        if (emailUser.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(emailUser).matches()) {
+            Toast.makeText(LoginActivity.this, "Ingrese un correo electrónico válido", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (passUser.isEmpty() || passUser.length() < 6) {
+            Toast.makeText(LoginActivity.this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         mAuth.signInWithEmailAndPassword(emailUser, passUser).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     FirebaseUser user = mAuth.getCurrentUser();
                     if (user != null && user.isEmailVerified()) {
                         finish();
@@ -105,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(LoginActivity.this, "Ocurrio un error al inisiar sesion", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Ocurrió un error al iniciar sesión: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

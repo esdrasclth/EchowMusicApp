@@ -19,7 +19,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.echowmusicapp.NavigationActivity;
 import com.example.echowmusicapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -83,21 +82,33 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser(String emailUser, String passUser) {
+        if (emailUser.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(emailUser).matches()) {
+            Toast.makeText(RegisterActivity.this, "Ingrese un correo electrónico válido", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (passUser.isEmpty() || passUser.length() < 6) {
+            Toast.makeText(RegisterActivity.this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         mAuth.createUserWithEmailAndPassword(emailUser, passUser).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     sendVerificationEmail();
-                    
+
+                    mAuth.signOut();
+
+                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                     finish();
                     Toast.makeText(RegisterActivity.this, "Usuario registrado correctamente", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(RegisterActivity.this, "EOcurrio un error al registrar usuario", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, "Ocurrió un error al registrar usuario: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
