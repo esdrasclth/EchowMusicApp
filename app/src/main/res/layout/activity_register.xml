@@ -55,6 +55,8 @@
             android:padding="6dp"
             android:ems="10"
             android:hint="Email"
+            android:drawableLeft="@drawable/ic_email"
+            android:drawablePadding="10dp"
             android:inputType="textEmailAddress" />
 
         <TextView
@@ -79,6 +81,8 @@
             android:padding="6dp"
             android:ems="10"
             android:hint="Contraseña"
+            android:drawableLeft="@drawable/ic_pass"
+            android:drawablePadding="10dp"
             android:inputType="textPassword" />
 
         <CheckBox

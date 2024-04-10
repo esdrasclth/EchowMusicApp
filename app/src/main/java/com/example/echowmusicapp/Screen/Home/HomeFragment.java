@@ -90,7 +90,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         progressDialog = new ProgressDialog(requireContext()); // Utiliza requireContext() en lugar de getActivity()
         uploads = new ArrayList<>();
-        progressDialog.setMessage("por favor espere...");
+        progressDialog.setMessage("Porfavor espere...");
         progressDialog.show();
         mDatabase = FirebaseDatabase.getInstance().getReference(Constants.DATABASE_PATH_UPLOADS);
         mDatabase.addValueEventListener(new ValueEventListener() {

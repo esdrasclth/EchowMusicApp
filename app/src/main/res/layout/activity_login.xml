@@ -55,6 +55,8 @@
             android:ems="10"
             android:hint="Email"
             android:textColorHint="@color/white"
+            android:drawableLeft="@drawable/ic_email"
+            android:drawablePadding="10dp"
             android:inputType="textEmailAddress" />
 
         <LinearLayout
@@ -95,6 +97,8 @@
             android:hint="Contraseña"
             android:textColorHint="@color/white"
             android:textColor="@color/white"
+            android:drawableLeft="@drawable/ic_pass"
+            android:drawablePadding="10dp"
             android:inputType="textPassword" />
 
         <CheckBox
