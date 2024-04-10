@@ -4,6 +4,7 @@ import static android.app.Activity.RESULT_OK;
 
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -170,9 +171,12 @@ public class AlbumFragment extends Fragment implements View.OnClickListener {
 
     private void uploadFile(Uri filePath) {
         if (this.filePath != null) {
-            ProgressDialog progressDialog = new ProgressDialog(getActivity());
+            final Context context = getActivity(); // Guardamos una referencia al contexto de la actividad
+
+            ProgressDialog progressDialog = new ProgressDialog(context);
             progressDialog.setTitle("Cargando...");
             progressDialog.show();
+
             final StorageReference sRef = storageReference.child(Constants.STORAGE_PATH_UPLOADS + System.currentTimeMillis() + "." + getFileExtension(this.filePath));
 
             sRef.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -186,7 +190,9 @@ public class AlbumFragment extends Fragment implements View.OnClickListener {
                             String uploadId = mDatabase.push().getKey();
                             mDatabase.child(uploadId).setValue(upload);
                             progressDialog.dismiss();
-                            Toast.makeText(getActivity(), "Archivo subido correctamente!", Toast.LENGTH_SHORT).show();
+
+                            // Ahora utilizamos la referencia al contexto guardada anteriormente
+                            Toast.makeText(context, "Archivo subido correctamente!", Toast.LENGTH_SHORT).show();
 
                             editTextName.setText("");
                             imageView.setImageResource(android.R.color.transparent);
@@ -197,7 +203,7 @@ public class AlbumFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     progressDialog.dismiss();
-                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                 @Override
