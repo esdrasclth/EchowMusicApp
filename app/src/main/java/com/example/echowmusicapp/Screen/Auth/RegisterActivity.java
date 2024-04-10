@@ -2,8 +2,12 @@ package com.example.echowmusicapp.Screen.Auth;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
     EditText email, password;
     Button register;
     TextView sesion;
+    CheckBox checkBox;
     FirebaseAuth mAuth;
 
     @Override
@@ -41,6 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
         password = findViewById(R.id.txtPassword);
         sesion = findViewById(R.id.lblSesion);
         register = findViewById(R.id.btnRegister);
+        checkBox = findViewById(R.id.checkBox);
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +66,17 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+            }
+        });
+
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                } else {
+                    password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
             }
         });
     }
