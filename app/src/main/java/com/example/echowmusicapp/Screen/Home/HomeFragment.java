@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,7 +88,7 @@ public class HomeFragment extends Fragment {
 
         recyclerView = rootView.findViewById(R.id.recyclerview_id);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        progressDialog = new ProgressDialog(getActivity());
+        progressDialog = new ProgressDialog(requireContext()); // Utiliza requireContext() en lugar de getActivity()
         uploads = new ArrayList<>();
         progressDialog.setMessage("por favor espere...");
         progressDialog.show();
@@ -101,16 +102,19 @@ public class HomeFragment extends Fragment {
                     uploads.add(upload);
                 }
 
-                adapter = new RecyclerViewAdapter(getActivity().getApplicationContext(), uploads);
-                recyclerView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+                // Verifica si el fragmento aún está adjunto a la actividad antes de actualizar la vista
+                if (isAdded()) {
+                    adapter = new RecyclerViewAdapter(requireContext(), uploads); // Utiliza requireContext() en lugar de getActivity()
+                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 progressDialog.dismiss();
-                Toast.makeText(getActivity(), "Error fetching data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                System.out.println(error.getMessage());
+                Toast.makeText(requireContext(), "Error fetching data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("HomeFragment", "Error fetching data: " + error.getMessage());
             }
         });
 
