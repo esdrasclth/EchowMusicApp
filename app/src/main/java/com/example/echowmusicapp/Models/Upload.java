@@ -12,6 +12,10 @@ public class Upload {
         this.songsCategory = songsCategory;
     }
 
+    public Upload() {
+
+    }
+
     public String getName() {
         return name;
     }
